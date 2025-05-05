@@ -1,0 +1,9 @@
+<!-- This would normally be a binary file. For this project, we'll create a small SVG that browsers can render instead -->
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" fill="#1E3A8A" rx="40" ry="40"/>
+  <g transform="translate(50, 50)">
+    <path d="m4 6 8-4 8 4" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M18 10 4 6v12l14 4V10Z" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M4 22 18 6" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>
