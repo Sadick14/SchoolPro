@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased bg-gradient-to-br from-gray-50 via-gray-100 to-gray-100 text-gray-800 selection:bg-primary-300/50;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+.glass-morphism {
+  @apply backdrop-blur-sm bg-white/80 border border-gray-200;
+}
+
+.premium-card {
+  @apply bg-white border border-gray-200 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300;
+}

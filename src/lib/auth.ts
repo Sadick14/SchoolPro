@@ -1,5 +1,11 @@
-import { supabase } from './supabase';
-import { getOfflineData, saveOfflineData } from './offlineSync';
+import { auth, db } from './firebase';
+import { 
+  signInWithEmailAndPassword, 
+  signOut as firebaseSignOut, 
+  onAuthStateChanged,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { create } from 'zustand';
 
 export type UserRole = 'super_admin' | 'school_admin' | 'teacher' | 'parent' | 'student';
@@ -13,12 +19,61 @@ interface AuthUser {
   avatar_url: string | null;
 }
 
+// Demo accounts for testing (email -> password)
+const DEMO_ACCOUNTS: Record<string, { password: string; user: AuthUser }> = {
+  'admin@schoolpro.demo': {
+    password: 'demo123',
+    user: {
+      id: 'demo-admin-1',
+      email: 'admin@schoolpro.demo',
+      full_name: 'Samuel Mensah',
+      role: 'school_admin',
+      school_id: 'sch-1',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Samuel',
+    }
+  },
+  'teacher@schoolpro.demo': {
+    password: 'demo123',
+    user: {
+      id: 'demo-teacher-1',
+      email: 'teacher@schoolpro.demo',
+      full_name: 'Ama Boateng',
+      role: 'teacher',
+      school_id: 'sch-1',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ama',
+    }
+  },
+  'parent@schoolpro.demo': {
+    password: 'demo123',
+    user: {
+      id: 'demo-parent-1',
+      email: 'parent@schoolpro.demo',
+      full_name: 'Kofi Adjei',
+      role: 'parent',
+      school_id: 'sch-1',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kofi',
+    }
+  },
+  'student@schoolpro.demo': {
+    password: 'demo123',
+    user: {
+      id: 'demo-student-1',
+      email: 'student@schoolpro.demo',
+      full_name: 'Kwame Mensah',
+      role: 'student',
+      school_id: 'sch-1',
+      avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kwame',
+    }
+  },
+};
+
 interface AuthState {
   user: AuthUser | null;
-  session: any | null;
+  firebaseUser: FirebaseUser | null;
   loading: boolean;
   error: string | null;
   initialized: boolean;
+  isDemoMode: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   setUser: (user: AuthUser | null) => void;
@@ -26,64 +81,49 @@ interface AuthState {
 
 export const useAuth = create<AuthState>((set) => ({
   user: null,
-  session: null,
+  firebaseUser: null,
   loading: true,
   error: null,
   initialized: false,
+  isDemoMode: false,
   setUser: (user) => set({ user }),
   signIn: async (email, password) => {
     set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      if (data.session && data.user) {
-        // Fetch additional user info from the users table
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', data.user.id)
-          .single();
-
-        if (userError) throw userError;
-
-        // Store user data offline for when offline
-        await saveOfflineData('users', userData);
-
+      // Check demo accounts first
+      const demoAccount = DEMO_ACCOUNTS[email.toLowerCase()];
+      if (demoAccount && demoAccount.password === password) {
         set({
-          user: userData as AuthUser,
-          session: data.session,
+          user: demoAccount.user,
+          firebaseUser: null,
+          isDemoMode: true,
           loading: false,
           initialized: true,
         });
+        return;
+      }
+
+      // Fall back to Firebase authentication
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const fUser = userCredential.user;
+
+      // Fetch additional user info from Firestore
+      const userDoc = await getDoc(doc(db, 'users', fUser.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as AuthUser;
+        set({
+          user: { ...userData, id: fUser.uid },
+          firebaseUser: fUser,
+          isDemoMode: false,
+          loading: false,
+          initialized: true,
+        });
+      } else {
+        throw new Error('User profile not found in system.');
       }
     } catch (error: any) {
       console.error('Sign in error:', error);
-      
-      // Try to authenticate from offline storage
-      if (!navigator.onLine) {
-        try {
-          const offlineUsers = await getOfflineData<any>('users');
-          const user = (offlineUsers as any[]).find(u => u.email === email);
-          
-          if (user) {
-            set({
-              user: user as AuthUser,
-              session: { offline: true },
-              loading: false,
-              initialized: true,
-            });
-            return;
-          }
-        } catch (offlineError) {
-          console.error('Offline auth error:', offlineError);
-        }
-      }
-      
       set({
         error: error.message || 'Error signing in',
         loading: false,
@@ -94,8 +134,15 @@ export const useAuth = create<AuthState>((set) => ({
   signOut: async () => {
     set({ loading: true });
     try {
-      await supabase.auth.signOut();
-      set({ user: null, session: null, loading: false });
+      const state = useAuth.getState();
+      if (state.isDemoMode) {
+        // For demo mode, just clear the user
+        set({ user: null, firebaseUser: null, loading: false, isDemoMode: false });
+      } else {
+        // For Firebase, sign out properly
+        await firebaseSignOut(auth);
+        set({ user: null, firebaseUser: null, loading: false });
+      }
     } catch (error: any) {
       console.error('Sign out error:', error);
       set({
@@ -106,53 +153,27 @@ export const useAuth = create<AuthState>((set) => ({
   },
 }));
 
-// Initialize auth state from session
-export const initAuth = async () => {
-  const { data } = await supabase.auth.getSession();
-  
-  if (data.session) {
-    const { data: userData, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', data.session.user.id)
-      .single();
-    
-    if (!error && userData) {
-      useAuth.setState({
-        user: userData as AuthUser,
-        session: data.session,
-        loading: false,
-        initialized: true,
-      });
-      
-      // Store user data offline
-      await saveOfflineData('users', userData);
-    }
-  } else {
-    useAuth.setState({ loading: false, initialized: true });
-  }
-  
-  // Setup auth state change listener
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-      
-      if (!error && userData) {
-        useAuth.setState({
-          user: userData as AuthUser,
-          session: session,
-          loading: false,
-        });
-        
-        // Store user data offline
-        await saveOfflineData('users', userData);
+// Initialize auth state from Firebase
+export const initAuth = () => {
+  return onAuthStateChanged(auth, async (fUser) => {
+    if (fUser) {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', fUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data() as AuthUser;
+          useAuth.setState({
+            user: { ...userData, id: fUser.uid },
+            firebaseUser: fUser,
+            loading: false,
+            initialized: true,
+          });
+        }
+      } catch (error) {
+        console.error('Error initializing user profile:', error);
+        useAuth.setState({ loading: false, initialized: true });
       }
-    } else if (event === 'SIGNED_OUT') {
-      useAuth.setState({ user: null, session: null });
+    } else {
+      useAuth.setState({ user: null, firebaseUser: null, loading: false, initialized: true });
     }
   });
 };
@@ -168,7 +189,7 @@ export const hasRole = (user: AuthUser | null, roles: UserRole | UserRole[]): bo
   return user.role === roles;
 };
 
-// Check if the user has access to class-specific features
+// Check if the user has access to class-specific features (Firestore version)
 export const hasClassAccess = async (
   userId: string,
   classId: string,
@@ -186,28 +207,9 @@ export const hasClassAccess = async (
     
     // For teachers, check if they are assigned to this class
     if (user.role === 'teacher') {
-      // Check if they are a class teacher for this section
-      if (sectionId) {
-        const { data: section } = await supabase
-          .from('sections')
-          .select('*')
-          .eq('id', sectionId)
-          .eq('teacher_id', userId)
-          .single();
-        
-        if (section) return true;
-      }
-      
-      // Check if they teach any subject in this class
-      const { data: teacherSubjects } = await supabase
-        .from('teacher_subjects')
-        .select('*')
-        .eq('teacher_id', userId)
-        .eq('class_id', classId);
-      
-      if (teacherSubjects && teacherSubjects.length > 0) {
-        return true;
-      }
+      // Logic for teacher access will go here once collections are setup
+      // For now, return false to be safe
+      return false; 
     }
     
     return false;
