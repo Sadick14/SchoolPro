@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import { initOfflineDB } from './lib/offlineSync';
-import { initAuth } from './lib/auth';
+import { initOfflineDB } from '@/shared/lib/offlineSync';
+import { initAuth } from '@/shared/lib/auth';
 import registerSW from './registerSW';
 
 // Initialize offline database and auth

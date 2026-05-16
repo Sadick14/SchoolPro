@@ -1,9 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@/shared': path.resolve(__dirname, './src/shared'),
+      '@/auth': path.resolve(__dirname, './src/auth'),
+      '@/platform': path.resolve(__dirname, './src/platform'),
+      '@/school': path.resolve(__dirname, './src/school'),
+      '@/teacher': path.resolve(__dirname, './src/teacher'),
+      '@/parent': path.resolve(__dirname, './src/parent'),
+      '@/student': path.resolve(__dirname, './src/student'),
+    },
+  },
   plugins: [
     react(),
     VitePWA({

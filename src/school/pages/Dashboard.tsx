@@ -1,21 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowUpRight,
   CalendarCheck,
   CheckCircle2,
+  Clock3,
   Download,
+  GraduationCap,
+  Landmark,
   MessageSquare,
   School,
+  TrendingUp,
   Users,
   Wallet,
 } from 'lucide-react';
 
-import Button from '../components/common/Button';
-import Card from '../components/common/Card';
-import StatCard from '../components/common/StatCard';
-import Table from '../components/common/Table';
+import Button from '@/shared/components/common/Button';
+import Card from '@/shared/components/common/Card';
+import StatCard from '@/shared/components/common/StatCard';
+import Table from '@/shared/components/common/Table';
 
-import { useAuth } from '../shared/lib/auth';
+import { useAuth } from '@/shared/lib/auth';
 
 type StatColor = 'primary' | 'success' | 'accent' | 'secondary';
 
@@ -42,6 +47,18 @@ interface Notification {
   id: string;
   title: string;
   content: string;
+}
+
+interface FinanceCard {
+  label: string;
+  value: string;
+}
+
+interface AttendanceHealthItem {
+  label: string;
+  value: string;
+  tone: string;
+  percent: string;
 }
 
 const statColor = (color?: string): StatColor => {
@@ -77,6 +94,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // 🔥 MULTI-TENANT CONTEXT
+  const schoolId = user?.school_id;
   const role = user?.role;
 
   const overview = fallbackOverview;
