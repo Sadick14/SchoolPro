@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayoutRoles';
-import Login from './pages/Login';
+import { Login } from './features/auth';
 import Dashboard from './pages/Dashboard';
 import TeacherAttendance from './pages/attendance/TeacherAttendance';
 import StudentsList from './pages/students/StudentsList';
@@ -30,6 +30,7 @@ import SystemDashboard from './pages/admin/SystemDashboard';
 import PendingSchools from './pages/admin/PendingSchools';
 import SupportTickets from './pages/admin/SupportTickets';
 import CreateSchool from './pages/admin/CreateSchool';
+import { ImplementationCommandCenter, ModuleWorkspace } from './features/platform';
 import ImplementationCommandCenter from './pages/platform/ImplementationCommandCenter';
 import ModuleWorkspace from './pages/platform/ModuleWorkspace';
 
