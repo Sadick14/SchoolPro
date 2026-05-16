@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  School, Users, Home, BookOpen, Calendar, ClipboardCheck, 
-  DollarSign, Bell, Menu, X, LogOut, UserCircle, Settings,
-  ChevronRight, TrendingUp, Bus, Building, Library, MessageSquare
+  School, Home, Bell, Menu, X, LogOut, UserCircle, Settings,
+  ChevronRight, TrendingUp
 } from 'lucide-react';
 import { MOCK_NOTIFICATIONS } from '@/shared/lib/mockData';
-import { useAuth, hasRole } from '@/shared/lib/auth';
+import { useAuth } from '@/shared/lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MainLayout: React.FC = () => {
@@ -31,80 +30,7 @@ const MainLayout: React.FC = () => {
     navigate('/login');
   };
   
-  const roleFolders = [
-    {
-      role: 'super_admin',
-      label: 'System',
-      icon: <School size={18} />, 
-      items: [
-        { path: '/system', label: 'Overview', icon: <TrendingUp size={16} /> },
-        { path: '/system/dashboard', label: 'Dashboard', icon: <Home size={16} /> },
-        { path: '/system/create-school', label: 'Create School', icon: <Building size={16} /> },
-        { path: '/system/pending', label: 'Pending Schools', icon: <ClipboardCheck size={16} /> },
-        { path: '/system/tickets', label: 'Support Tickets', icon: <MessageSquare size={16} /> },
-      ]
-    },
-    {
-      role: 'school_admin',
-      label: 'School',
-      icon: <School size={18} />,
-      items: [
-        { path: '/school', label: 'Owner Dashboard', icon: <Home size={16} /> },
-        { path: '/school/campuses', label: 'Campuses', icon: <Building size={16} /> },
-        { path: '/school/staff', label: 'Staff Management', icon: <UserCircle size={16} /> },
-        { path: '/school/admissions', label: 'Admissions', icon: <ClipboardCheck size={16} /> },
-        { path: '/students', label: 'Students', icon: <Users size={16} /> },
-        { path: '/classes', label: 'Classes', icon: <BookOpen size={16} /> },
-        { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
-        { path: '/hr', label: 'HR', icon: <UserCircle size={16} /> },
-        { path: '/hostel', label: 'Hostel', icon: <Building size={16} /> },
-        { path: '/transport', label: 'Transport', icon: <Bus size={16} /> },
-        { path: '/library', label: 'Library', icon: <Library size={16} /> },
-        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
-      ]
-    },
-    {
-      role: 'teacher',
-      label: 'Teacher',
-      icon: <Users size={18} />,
-      items: [
-        { path: '/teacher', label: 'Dashboard', icon: <Home size={16} /> },
-        { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
-        { path: '/assessments', label: 'Assessments', icon: <ClipboardCheck size={16} /> },
-        { path: '/students', label: 'My Students', icon: <Users size={16} /> },
-        { path: '/classes', label: 'My Classes', icon: <BookOpen size={16} /> },
-        { path: '/library', label: 'Library', icon: <Library size={16} /> },
-        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
-      ]
-    },
-    {
-      role: 'parent',
-      label: 'Parent',
-      icon: <Users size={18} />,
-      items: [
-        { path: '/parent', label: 'Portal', icon: <Home size={16} /> },
-        { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
-        { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
-        { path: '/transport', label: 'Transport', icon: <Bus size={16} /> },
-        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
-      ]
-    },
-    {
-      role: 'student',
-      label: 'Student',
-      icon: <Users size={18} />,
-      items: [
-        { path: '/student', label: 'Portal', icon: <Home size={16} /> },
-        { path: '/assessments', label: 'Exams', icon: <ClipboardCheck size={16} /> },
-        { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
-        { path: '/library', label: 'Library', icon: <Library size={16} /> },
-        { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
-        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
-      ]
-    }
-  ];
 
-  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   
   if (!user) {
     return <Outlet />;
@@ -136,25 +62,22 @@ const MainLayout: React.FC = () => {
         
         <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
           <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest ml-4 mb-4">Main Menu</p>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                }`
-              }
-            >
-              <div className="flex items-center space-x-3">
-                {item.icon}
-                <span className="font-medium">{item.label}</span>
-              </div>
-              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-            </NavLink>
-          ))}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 ${
+                isActive
+                  ? 'bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              }`
+            }
+          >
+            <div className="flex items-center space-x-3">
+              <Home size={16} />
+              <span className="font-medium">Dashboard</span>
+            </div>
+            <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+          </NavLink>
         </nav>
         
         {/* User Card */}

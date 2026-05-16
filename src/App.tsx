@@ -133,6 +133,11 @@ function App() {
             <Route index element={<TeacherDashboard />} />
             <Route path="dashboard" element={<TeacherDashboard />} />
             <Route path="assessments" element={<AssessmentsList />} />
+            <Route path="attendance" element={<TeacherAttendance />} />
+            <Route path="students" element={<StudentsList />} />
+            <Route path="classes" element={<ClassesList />} />
+            <Route path="library" element={<LibraryManagement />} />
+            <Route path="communications" element={<Notices />} />
             <Route path="profile" element={<Profile />} />
           </>
         )}
@@ -144,6 +149,10 @@ function App() {
           <>
             <Route index element={<ParentPortal />} />
             <Route path="dashboard" element={<ParentPortal />} />
+            <Route path="attendance" element={<TeacherAttendance />} />
+            <Route path="fees" element={<FeesManagement />} />
+            <Route path="transport" element={<TransportManagement />} />
+            <Route path="communications" element={<Notices />} />
             <Route path="profile" element={<Profile />} />
           </>
         )}
@@ -155,6 +164,11 @@ function App() {
           <>
             <Route index element={<StudentPortal />} />
             <Route path="dashboard" element={<StudentPortal />} />
+            <Route path="assessments" element={<AssessmentsList />} />
+            <Route path="attendance" element={<TeacherAttendance />} />
+            <Route path="library" element={<LibraryManagement />} />
+            <Route path="fees" element={<FeesManagement />} />
+            <Route path="communications" element={<Notices />} />
             <Route path="profile" element={<Profile />} />
           </>
         )}

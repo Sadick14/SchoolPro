@@ -13,7 +13,7 @@ const ModuleToggle: React.FC<ModuleToggleProps> = ({ id, name, description, enab
   return (
     <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
       <div>
-        <div className="font-bold text-white">{name}</div>
+        <div className="font-bold text-black">{name}</div>
         {description && <div className="text-xs text-slate-400 mt-1">{description}</div>}
       </div>
       <div className="flex items-center space-x-3">

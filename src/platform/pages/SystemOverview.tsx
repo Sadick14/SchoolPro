@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '@/shared/components/common/Card';
 import Button from '@/shared/components/common/Button';
 import ModulesPanel from '@/platform/components/ModulesPanel';
@@ -33,7 +34,7 @@ const SystemOverview: React.FC = () => {
     <div className="space-y-8 p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold text-white">System Overview</h1>
+          <h1 className="text-3xl font-extrabold text-black">System Overview</h1>
           <p className="text-slate-400 mt-1">Manage tenants, modules, and global configuration.</p>
         </div>
         <div className="flex items-center space-x-3">
@@ -51,7 +52,7 @@ const SystemOverview: React.FC = () => {
               {schools.map(s => (
                 <div key={s.id} className={`p-3 rounded-xl border ${selectedSchool === s.id ? 'border-primary-500 bg-white/5' : 'border-white/5' } flex items-center justify-between` }>
                   <div>
-                    <div className="font-bold text-white">{s.name}</div>
+                    <div className="font-bold text-black">{s.name}</div>
                     <div className="text-xs text-slate-400">{s.city}, {s.region} — {s.students} students</div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -66,7 +67,7 @@ const SystemOverview: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-bold text-white">Levels / Operation</p>
+                  <p className="text-sm font-bold text-black">Levels / Operation</p>
                   <p className="text-xs text-slate-400">Configure whether the school runs single or multiple levels.</p>
                 </div>
                 <div className="space-x-2">
@@ -76,13 +77,13 @@ const SystemOverview: React.FC = () => {
               </div>
 
               <div>
-                <p className="text-sm font-bold text-white">Subscription Plan</p>
+                <p className="text-sm font-bold text-black">Subscription Plan</p>
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
                   {MOCK_PLANS.map(p => (
                     <div key={p.id} className={`p-3 rounded-xl border ${plan === p.id ? 'border-primary-500 bg-white/5' : 'border-white/5'}`}>
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-white">{p.name}</div>
+                          <div className="font-bold text-black">{p.name}</div>
                           <div className="text-xs text-slate-400">{p.price}</div>
                         </div>
                         <div>
@@ -106,7 +107,7 @@ const SystemOverview: React.FC = () => {
           </Card>
 
           <Card title="Platform Summary">
-            <div className="text-sm text-slate-400 space-y-2">
+            <div className="text-sm text-black space-y-2">
               <div>Total schools: {schools.length}</div>
               <div>Active modules: {modules.filter(m => m.enabled).length}</div>
               <div>Plans available: {MOCK_PLANS.length}</div>
