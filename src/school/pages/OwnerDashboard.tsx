@@ -27,6 +27,8 @@ const OwnerDashboard: React.FC = () => {
           <p className="text-slate-400 mt-1">Manage your school: campuses, staff, admissions, finances and settings.</p>
         </div>
         <div className="flex items-center space-x-3">
+          <Button onClick={() => navigate('/school/setup')}>Initial Setup</Button>
+          <Button variant="glass" onClick={() => navigate('/academics')}>Academics</Button>
           <Button variant="glass" onClick={() => navigate('/school/campuses')}>Campuses</Button>
           <Button variant="glass" onClick={() => navigate('/school/staff')}>Staff</Button>
           <Button variant="glass" onClick={() => navigate('/school/admissions')}>Admissions</Button>
@@ -46,6 +48,8 @@ const OwnerDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card title="Quick Actions">
           <div className="space-y-3">
+            <Button onClick={() => navigate('/school/setup')}>Continue Initial Setup</Button>
+            <Button onClick={() => navigate('/academics')}>Academic Sessions</Button>
             <Button onClick={() => navigate('/school/campuses')}>Manage Campuses</Button>
             <Button onClick={() => navigate('/school/staff')}>Add Staff</Button>
             <Button onClick={() => navigate('/school/admissions')}>Review Admissions</Button>
@@ -56,8 +60,11 @@ const OwnerDashboard: React.FC = () => {
           <div className="text-sm text-slate-400">Summary of fees collected and outstanding totals (mock).</div>
         </Card>
 
-        <Card title="Academic Snapshot">
-          <div className="text-sm text-slate-400">Quick view of active levels and classes (mock).</div>
+        <Card title="Setup Flow">
+          <div className="space-y-3 text-sm text-gray-600">
+            <p>Continue the owner-led launch sequence for academic structure, staff access, student imports, and finance rules.</p>
+            <Button variant="outline" onClick={() => navigate('/school/setup')}>Open setup checklist</Button>
+          </div>
         </Card>
       </div>
     </div>
