@@ -1,70 +1,125 @@
-import React, { useState, useEffect } from 'react';
-import Card from '../components/common/Card';
-import { useAuth } from '../lib/auth';
-import { 
-  Users, BookOpen, CalendarCheck, Bell, School, 
-  TrendingUp, TrendingDown, MoreHorizontal, Plus, 
-  Wallet, PieChart, CheckCircle2 
+import React, { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  ArrowUpRight,
+  CalendarCheck,
+  CheckCircle2,
+  Clock3,
+  Download,
+  GraduationCap,
+  Landmark,
+  MessageSquare,
+  School,
+  TrendingUp,
+  Users,
+  Wallet,
 } from 'lucide-react';
 import Button from '../components/common/Button';
-import Table from '../components/common/Table';
-import { MOCK_STATS, MOCK_STUDENTS, MOCK_NOTIFICATIONS } from '../lib/mockData';
-import { motion } from 'framer-motion';
+import Card from '../components/common/Card';
 import StatCard from '../components/common/StatCard';
+import Table from '../components/common/Table';
+import { MOCK_NOTIFICATIONS, MOCK_STATS, MOCK_STUDENTS } from '../lib/mockData';
+import { useAuth } from '../lib/auth';
+
+type StatColor = 'primary' | 'success' | 'accent' | 'secondary';
+
+interface AdmissionRow {
+  id: string;
+  full_name: string;
+  admission_id: string;
+  class: string;
+  stream: string;
+  status: string;
+  attendance: string;
+  fees_paid: string;
+  fees_due: string;
+  avatar: string;
+}
+
+const statColor = (color: string): StatColor => {
+  if (color === 'success' || color === 'accent' || color === 'secondary') {
+    return color;
+  }
+
+  return 'primary';
+};
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => setIsLoading(false), 800);
+    const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  const stats = MOCK_STATS;
+  const admissions = useMemo(() => MOCK_STUDENTS as AdmissionRow[], []);
+  const firstName = user?.full_name.split(' ')[0] ?? 'there';
+
+  const attendanceHealth = [
+    { label: 'Present', value: '2,309', tone: 'bg-emerald-500', percent: '94%' },
+    { label: 'Late', value: '84', tone: 'bg-amber-500', percent: '3%' },
+    { label: 'Absent', value: '57', tone: 'bg-red-500', percent: '3%' },
+  ];
+
+  const financeCards = [
+    { label: 'Collected this term', value: 'GHS 142,000' },
+    { label: 'Outstanding balance', value: 'GHS 24,300' },
+    { label: 'Scholarships applied', value: 'GHS 8,700' },
+  ];
 
   if (isLoading) {
     return (
       <div className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded-[2rem] animate-pulse" />
+        <div className="h-72 animate-pulse rounded-[2rem] bg-gray-200" />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {[1, 2, 3, 4].map((item) => (
+            <div key={item} className="h-36 animate-pulse rounded-3xl bg-gray-200" />
           ))}
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <div className="lg:col-span-2 h-96 bg-gray-200 rounded-[2rem] animate-pulse" />
-           <div className="h-96 bg-gray-200 rounded-[2rem] animate-pulse" />
+        <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
+          <div className="h-96 animate-pulse rounded-3xl bg-gray-200 xl:col-span-2" />
+          <div className="h-96 animate-pulse rounded-3xl bg-gray-200" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-10 pb-12">
-      {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-            Akwaaba, <span className="text-primary-600 capitalize">{user?.full_name.split(' ')[0]}</span>
-          </h1>
-          <p className="text-gray-600 mt-2 font-medium">
-            Here's what's happening in your school today.
-          </p>
-        </motion.div>
-        
-        <div className="flex items-center space-x-3">
-           <Button variant="glass" icon={<Plus size={18} />}>Manage</Button>
-           <Button icon={<Wallet size={18} />}>MoMo Portal</Button>
-        </div>
-      </div>
+    <div className="space-y-8 pb-12">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-slate-950 p-8 shadow-2xl">
+        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-amber-400/20 blur-3xl" />
+        <div className="absolute bottom-0 left-1/3 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="relative z-10 grid gap-8 xl:grid-cols-[1.5fr_1fr] xl:items-end">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-amber-100">
+              <School size={14} /> Live school operations
+            </div>
+            <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-white md:text-5xl">
+              Welcome back, <span className="text-amber-300">{firstName}</span>
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-300">
+              A professional command view of enrolment, attendance, collections, notices, and regulator-ready school operations for today.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button icon={<Wallet size={18} />}>Open MoMo reconciliation</Button>
+              <Button variant="glass" icon={<Download size={18} />}>Export daily report</Button>
+            </div>
+          </motion.div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
+          <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+            {financeCards.map((item) => (
+              <div key={item.label} className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
+                <p className="mt-2 text-xl font-black text-white">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {MOCK_STATS.map((stat) => (
           <StatCard
             key={stat.label}
             label={stat.label}
@@ -75,85 +130,150 @@ const Dashboard: React.FC = () => {
               stat.label.includes('Attendance') ? <CalendarCheck size={20} /> :
               stat.label.includes('Fees') ? <Wallet size={20} /> : <School size={20} />
             }
-            color={stat.color as any}
+            color={statColor(stat.color)}
           />
         ))}
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Students Table */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight flex items-center">
-              <Users size={20} className="mr-3 text-primary-600" />
-              Recent Admissions
-            </h2>
-            <Button variant="outline" size="sm">View All</Button>
-          </div>
-          <Table
-            columns={[
-              { 
-                header: 'Student', 
-                accessor: (s) => (
-                  <div className="flex items-center space-x-3">
-                    <img src={s.avatar} className="w-8 h-8 rounded-lg" alt="" />
-                    <span className="font-bold">{s.full_name}</span>
+      <section className="grid grid-cols-1 gap-8 xl:grid-cols-[1.55fr_0.95fr]">
+        <Table<AdmissionRow>
+          title="Recent admissions"
+          subtitle="Clean operational table with student, academic, attendance, and fee context."
+          actions={<Button variant="outline" size="sm" icon={<ArrowUpRight size={16} />}>View all students</Button>}
+          columns={[
+            {
+              header: 'Student',
+              width: '34%',
+              accessor: (student) => (
+                <div className="flex items-center gap-3">
+                  <img src={student.avatar} className="h-11 w-11 rounded-2xl border border-gray-200 bg-gray-50" alt="" />
+                  <div>
+                    <div className="font-black text-gray-900">{student.full_name}</div>
+                    <div className="text-xs font-bold text-gray-400">{student.admission_id}</div>
                   </div>
-                ) 
-              },
-              { header: 'Class', accessor: 'class' },
-              { 
-                header: 'Status', 
-                accessor: (s) => (
-                  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                    s.status === 'active' ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700'
-                  }`}>
-                    {s.status}
-                  </span>
-                ) 
-              },
-              { header: 'Fees', accessor: 'fees_paid', className: 'text-right' },
-            ]}
-            data={MOCK_STUDENTS}
-            keyExtractor={(s) => s.id}
-          />
-        </div>
+                </div>
+              ),
+            },
+            {
+              header: 'Programme',
+              accessor: (student) => (
+                <div>
+                  <div className="font-black text-gray-800">{student.class}</div>
+                  <div className="text-xs font-bold text-gray-400">{student.stream}</div>
+                </div>
+              ),
+            },
+            {
+              header: 'Attendance',
+              accessor: (student) => (
+                <div className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700 ring-1 ring-blue-100">
+                  {student.attendance}
+                </div>
+              ),
+              align: 'center',
+            },
+            {
+              header: 'Fee balance',
+              accessor: (student) => (
+                <div className="text-right">
+                  <div className="font-black text-gray-900">{student.fees_due}</div>
+                  <div className="text-xs font-bold text-gray-400">Paid {student.fees_paid}</div>
+                </div>
+              ),
+              align: 'right',
+            },
+            {
+              header: 'Status',
+              accessor: (student) => (
+                <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider ring-1 ${
+                  student.status === 'active' ? 'bg-emerald-50 text-emerald-700 ring-emerald-100' : 'bg-amber-50 text-amber-700 ring-amber-100'
+                }`}>
+                  {student.status}
+                </span>
+              ),
+              align: 'right',
+            },
+          ]}
+          data={admissions}
+          keyExtractor={(student) => student.id}
+        />
 
-        {/* Notifications & Activity */}
         <div className="space-y-8">
-          <Card title="Academics & Notices" className="h-full">
-            <div className="space-y-6">
-              {MOCK_NOTIFICATIONS.map((note, i) => (
-                <div key={note.id} className="flex space-x-4 group cursor-pointer">
-                  <div className={`mt-1 w-2 h-2 rounded-full shrink-0 ${
-                    note.type === 'payment' ? 'bg-success-600' : 
-                    note.type === 'academic' ? 'bg-primary-600' : 'bg-accent-600'
-                  } group-hover:scale-150 transition-transform`} />
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-primary-600 transition-colors uppercase tracking-tight">{note.title}</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed font-medium line-clamp-2">{note.content}</p>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase mt-2">2 HOURS AGO</p>
+          <Card title="Attendance health" variant="solid">
+            <div className="space-y-5">
+              {attendanceHealth.map((item) => (
+                <div key={item.label}>
+                  <div className="mb-2 flex items-center justify-between text-sm font-black text-gray-800">
+                    <span>{item.label}</span>
+                    <span>{item.value}</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-gray-100">
+                    <div className={`h-2 rounded-full ${item.tone}`} style={{ width: item.percent }} />
                   </div>
                 </div>
               ))}
-              <Button variant="glass" className="w-full mt-4 text-xs">Clear Notifications</Button>
+              <div className="rounded-2xl bg-slate-50 p-4 text-sm font-semibold leading-6 text-gray-600">
+                Today's school-wide attendance is above the weekly benchmark. Continue monitoring late arrivals before first period.
+              </div>
             </div>
           </Card>
 
-          {/* Quick Stats Mini-Card */}
-          <div className="premium-card p-8 bg-gradient-to-br from-primary-500 to-accent-500 relative overflow-hidden group">
-             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform">
-                <PieChart size={120} />
-             </div>
-             <h3 className="text-white font-black text-xl mb-2 relative z-10">Ghana Education Service</h3>
-             <p className="text-white/80 text-xs font-bold uppercase tracking-widest mb-6 relative z-10">Report Status: Finalizing</p>
-             <div className="flex items-center space-x-2 text-white relative z-10 bg-white/20 p-2 rounded-xl border border-white/30 backdrop-blur-sm">
-                <CheckCircle2 size={16} />
-                <span className="text-[10px] font-bold uppercase">Ready for export</span>
-             </div>
-          </div>
+          <Card title="GES report readiness" variant="solid">
+            <div className="flex items-start gap-4">
+              <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-700 ring-1 ring-emerald-100">
+                <CheckCircle2 size={22} />
+              </div>
+              <div>
+                <h3 className="font-black text-gray-900">Final validation in progress</h3>
+                <p className="mt-2 text-sm font-medium leading-6 text-gray-600">
+                  Attendance, enrolment, finance, and academic summaries are ready for regulator-friendly export.
+                </p>
+              </div>
+            </div>
+          </Card>
         </div>
-      </div>
+      </section>
+
+      <section className="grid grid-cols-1 gap-8 xl:grid-cols-3">
+        <Card title="Operational notices" className="xl:col-span-2" variant="solid">
+          <div className="grid gap-4 md:grid-cols-3">
+            {MOCK_NOTIFICATIONS.map((note) => (
+              <div key={note.id} className="rounded-3xl border border-gray-100 bg-gray-50 p-5 transition hover:bg-white hover:shadow-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className={`rounded-2xl p-2 ${
+                    note.type === 'payment' ? 'bg-emerald-100 text-emerald-700' :
+                    note.type === 'academic' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'
+                  }`}>
+                    <MessageSquare size={18} />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Today</span>
+                </div>
+                <h3 className="font-black text-gray-900">{note.title}</h3>
+                <p className="mt-2 line-clamp-3 text-sm font-medium leading-6 text-gray-600">{note.content}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card title="Academic pulse" variant="solid">
+          <div className="space-y-4">
+            {[
+              { icon: <GraduationCap size={18} />, title: 'Mid-term marks', detail: '82% submitted by teachers' },
+              { icon: <Clock3 size={18} />, title: 'Timetable coverage', detail: '14 classes fully assigned' },
+              { icon: <Landmark size={18} />, title: 'Finance close', detail: 'Daily cashbook pending approval' },
+              { icon: <TrendingUp size={18} />, title: 'Performance trend', detail: 'Science stream improved by 6%' },
+            ].map((item) => (
+              <div key={item.title} className="flex items-center gap-4 rounded-2xl bg-gray-50 p-4">
+                <div className="rounded-xl bg-white p-2 text-primary-600 shadow-sm">{item.icon}</div>
+                <div>
+                  <p className="font-black text-gray-900">{item.title}</p>
+                  <p className="text-sm font-medium text-gray-500">{item.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </section>
     </div>
   );
 };

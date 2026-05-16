@@ -10,29 +10,38 @@ interface StatCardProps {
 }
 
 const colorMap = {
-  primary: 'bg-primary-100 text-primary-600',
-  success: 'bg-success-100 text-success-600',
-  accent: 'bg-accent-100 text-accent-600',
-  secondary: 'bg-secondary-100 text-secondary-700',
+  primary: 'bg-amber-50 text-amber-700 ring-amber-100',
+  success: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+  accent: 'bg-blue-50 text-blue-700 ring-blue-100',
+  secondary: 'bg-slate-50 text-slate-700 ring-slate-100',
+};
+
+const trendMap = {
+  positive: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+  negative: 'bg-red-50 text-red-700 ring-red-100',
+  neutral: 'bg-slate-50 text-slate-600 ring-slate-100',
 };
 
 const StatCard: React.FC<StatCardProps> = ({ label, value, trend = '', icon, color = 'primary' }) => {
+  const trendTone = trend.startsWith('+') ? 'positive' : trend.startsWith('-') ? 'negative' : 'neutral';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="premium-card p-6 flex flex-col justify-between"
+      className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
-      <div className="flex justify-between items-start">
-        <div className={`p-3 rounded-2xl ${colorMap[color]} transition-colors`}>{icon}</div>
-        <div className={`flex items-center text-xs font-bold ${trend.startsWith('+') ? 'text-success-600' : 'text-error-600'}`}>
-          {trend.startsWith('+') ? <span className="mr-1">▲</span> : <span className="mr-1">▼</span>}
-          {trend}
-        </div>
+      <div className="flex items-start justify-between gap-4">
+        <div className={`rounded-2xl p-3 ring-1 ${colorMap[color]}`}>{icon}</div>
+        {trend && (
+          <div className={`rounded-full px-3 py-1 text-xs font-black ring-1 ${trendMap[trendTone]}`}>
+            {trendTone === 'positive' ? '▲' : trendTone === 'negative' ? '▼' : '●'} {trend}
+          </div>
+        )}
       </div>
-      <div className="mt-4">
-        <p className="text-2xl font-black text-gray-900">{value}</p>
-        <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mt-1">{label}</p>
+      <div className="mt-5">
+        <p className="text-3xl font-black tracking-tight text-gray-950">{value}</p>
+        <p className="mt-2 text-xs font-black uppercase tracking-[0.18em] text-gray-500">{label}</p>
       </div>
     </motion.div>
   );
