@@ -3,11 +3,25 @@ import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   School, Users, Home, BookOpen, Calendar, ClipboardCheck, 
   DollarSign, Bell, Menu, X, LogOut, UserCircle, Settings,
-  ChevronRight, TrendingUp, Bus, Building, Library, MessageSquare
+  ChevronRight, TrendingUp, Bus, Building, Library, MessageSquare, HeartPulse, Laptop, ShieldCheck, FileText, WalletCards
 } from 'lucide-react';
 import { MOCK_NOTIFICATIONS } from '../../lib/mockData';
 import { useAuth, hasRole } from '../../lib/auth';
+import type { UserRole } from '../../lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+interface RoleFolder {
+  role: UserRole;
+  label: string;
+  icon: React.ReactNode;
+  items: NavItem[];
+}
 
 const MainLayoutRoles: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,15 +41,17 @@ const MainLayoutRoles: React.FC = () => {
     navigate('/login');
   };
 
-  const roleFolders = [
+  const roleFolders: RoleFolder[] = [
     {
       role: 'super_admin',
       label: 'System',
       icon: <School size={18} />, 
       items: [
         { path: '/system', label: 'Overview', icon: <TrendingUp size={16} /> },
+        { path: '/implementation', label: 'Implementation', icon: <ShieldCheck size={16} /> },
         { path: '/system/dashboard', label: 'Dashboard', icon: <Home size={16} /> },
         { path: '/system/create-school', label: 'Create School', icon: <Building size={16} /> },
+        { path: '/subscriptions', label: 'Subscriptions', icon: <WalletCards size={16} /> },
         { path: '/system/pending', label: 'Pending Schools', icon: <ClipboardCheck size={16} /> },
         { path: '/system/tickets', label: 'Support Tickets', icon: <MessageSquare size={16} /> },
       ]
@@ -52,10 +68,16 @@ const MainLayoutRoles: React.FC = () => {
         { path: '/students', label: 'Students', icon: <Users size={16} /> },
         { path: '/classes', label: 'Classes', icon: <BookOpen size={16} /> },
         { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
+        { path: '/finance', label: 'Accounting', icon: <WalletCards size={16} /> },
+        { path: '/payroll', label: 'Payroll', icon: <UserCircle size={16} /> },
         { path: '/hr', label: 'HR', icon: <UserCircle size={16} /> },
         { path: '/hostel', label: 'Hostel', icon: <Building size={16} /> },
         { path: '/transport', label: 'Transport', icon: <Bus size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
+        { path: '/clinic', label: 'Clinic', icon: <HeartPulse size={16} /> },
+        { path: '/security', label: 'Security', icon: <ShieldCheck size={16} /> },
+        { path: '/reports', label: 'Reports', icon: <FileText size={16} /> },
         { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
       ]
     },
@@ -67,6 +89,7 @@ const MainLayoutRoles: React.FC = () => {
         { path: '/teacher', label: 'Dashboard', icon: <Home size={16} /> },
         { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
         { path: '/assessments', label: 'Assessments', icon: <ClipboardCheck size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
         { path: '/students', label: 'My Students', icon: <Users size={16} /> },
         { path: '/classes', label: 'My Classes', icon: <BookOpen size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
@@ -91,6 +114,7 @@ const MainLayoutRoles: React.FC = () => {
       icon: <Users size={18} />,
       items: [
         { path: '/student', label: 'Portal', icon: <Home size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
         { path: '/assessments', label: 'Exams', icon: <ClipboardCheck size={16} /> },
         { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
