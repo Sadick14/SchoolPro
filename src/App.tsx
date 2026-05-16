@@ -23,6 +23,7 @@ import {
 import {
   Dashboard,
   OwnerDashboard,
+  InitialSetup,
   Campuses,
   StaffManagement,
   Admissions,
@@ -106,6 +107,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="school" element={<OwnerDashboard />} />
             <Route path="school/profile" element={<OwnerDashboard />} />
+            <Route path="school/setup" element={<InitialSetup />} />
             <Route path="school/campuses" element={<Campuses />} />
             <Route path="school/staff" element={<StaffManagement />} />
             <Route path="school/admissions" element={<Admissions />} />

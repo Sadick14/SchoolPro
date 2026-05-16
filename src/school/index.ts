@@ -2,6 +2,7 @@
 export { default as Dashboard } from './pages/Dashboard';
 export { default as Profile } from './pages/Profile';
 export { default as OwnerDashboard } from './pages/OwnerDashboard';
+export { default as InitialSetup } from './pages/InitialSetup';
 export { default as Campuses } from './pages/Campuses';
 export { default as StaffManagement } from './pages/StaffManagement';
 export { default as Admissions } from './pages/Admissions';
