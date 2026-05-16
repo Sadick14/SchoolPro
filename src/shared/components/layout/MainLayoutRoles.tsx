@@ -8,7 +8,6 @@ import {
 import { MOCK_NOTIFICATIONS } from '@/shared/lib/mockData';
 import { useAuth, hasRole } from '@/shared/lib/auth';
 import type { UserRole } from '@/shared/lib/auth';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavItem {
   path: string;
@@ -65,6 +64,7 @@ const MainLayoutRoles: React.FC = () => {
       icon: <School size={18} />,
       items: [
         { path: '/school', label: 'Owner Dashboard', icon: <Home size={16} /> },
+        { path: '/school/setup', label: 'Initial Setup', icon: <ClipboardCheck size={16} /> },
         { path: '/school/campuses', label: 'Campuses', icon: <Building size={16} /> },
         { path: '/school/staff', label: 'Staff Management', icon: <UserCircle size={16} /> },
         { path: '/school/admissions', label: 'Admissions', icon: <ClipboardCheck size={16} /> },
