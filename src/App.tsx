@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayoutRoles';
-import Login from './pages/Login';
+import { Login } from './features/auth';
 import Dashboard from './pages/Dashboard';
 import TeacherAttendance from './pages/attendance/TeacherAttendance';
 import StudentsList from './pages/students/StudentsList';
@@ -30,6 +30,7 @@ import SystemDashboard from './pages/admin/SystemDashboard';
 import PendingSchools from './pages/admin/PendingSchools';
 import SupportTickets from './pages/admin/SupportTickets';
 import CreateSchool from './pages/admin/CreateSchool';
+import { ImplementationCommandCenter, ModuleWorkspace } from './features/platform';
 
 function App() {
   const { initialized } = useAuth();
@@ -61,6 +62,14 @@ function App() {
         <Route path="students" element={<StudentsList />} />
         <Route path="classes" element={<ClassesList />} />
         <Route path="fees" element={<FeesManagement />} />
+        <Route path="finance" element={<ModuleWorkspace moduleId="finance-accounting" />} />
+        <Route path="subscriptions" element={<ModuleWorkspace moduleId="subscriptions-billing" />} />
+        <Route path="payroll" element={<ModuleWorkspace moduleId="hr-payroll" />} />
+        <Route path="lms" element={<ModuleWorkspace moduleId="lms-elearning" />} />
+        <Route path="clinic" element={<ModuleWorkspace moduleId="clinic" />} />
+        <Route path="security" element={<ModuleWorkspace moduleId="audit-security" />} />
+        <Route path="reports" element={<ModuleWorkspace moduleId="reports-compliance" />} />
+        <Route path="modules/:moduleId" element={<ModuleWorkspace />} />
         
         <Route path="assessments" element={<AssessmentsList />} />
         <Route path="hr" element={<StaffDirectory />} />
@@ -69,6 +78,7 @@ function App() {
         <Route path="library" element={<LibraryManagement />} />
         <Route path="notifications" element={<Notices />} />
         <Route path="system" element={<SystemOverview />} />
+        <Route path="implementation" element={<ImplementationCommandCenter />} />
         <Route path="system/create-school" element={<CreateSchool />} />
         <Route path="system/dashboard" element={<SystemDashboard />} />
         <Route path="system/pending" element={<PendingSchools />} />
@@ -76,8 +86,7 @@ function App() {
         <Route path="tenants/:id" element={<TenantDetail />} />
         
         <Route path="schools" element={<SchoolsList />} />
-        <Route path="profile" element={<div className="p-8"><h1 className="text-2xl font-bold">User Profile (Coming Soon)</h1></div>} />
-          <Route path="profile" element={<Profile />} />
+        <Route path="profile" element={<Profile />} />
           <Route path="school" element={<OwnerDashboard />} />
           <Route path="school/campuses" element={<Campuses />} />
           <Route path="school/staff" element={<StaffManagement />} />
