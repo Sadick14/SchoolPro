@@ -12,13 +12,13 @@ const SupportTickets: React.FC = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-extrabold text-white mb-4">Support Tickets</h1>
+      <h1 className="text-2xl font-extrabold text-black mb-4">Support Tickets</h1>
       <div className="space-y-4">
         {tickets.map(t => (
           <Card key={t.id}>
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-bold text-white">{t.title}</div>
+                <div className="font-bold text-black">{t.title}</div>
                 <div className="text-xs text-slate-400">Created: {t.created_at}</div>
               </div>
               <div className="flex items-center space-x-3">
