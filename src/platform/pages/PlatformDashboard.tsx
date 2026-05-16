@@ -92,31 +92,31 @@ const PlatformDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           label="Total Schools"
-          value={metrics.activeSchools}
+          value={metrics.activeSchools.toString()}
           icon={<Building2 className="w-6 h-6" />}
-          trend={{ value: 12, direction: 'up' }}
-          color="blue"
+          trend="+12"
+          color="primary"
         />
         <StatCard
           label="Active Users"
-          value={metrics.activeUsers}
+          value={metrics.activeUsers.toString()}
           icon={<Users className="w-6 h-6" />}
-          trend={{ value: 8, direction: 'up' }}
-          color="green"
+          trend="+8"
+          color="success"
         />
         <StatCard
           label="Monthly Revenue"
           value={`GHS ${metrics.monthlyRevenue.toLocaleString()}`}
           icon={<TrendingUp className="w-6 h-6" />}
-          trend={{ value: 15, direction: 'up' }}
-          color="purple"
+          trend="+15"
+          color="accent"
         />
         <StatCard
           label="System Uptime"
           value={metrics.systemUptime}
           icon={<Clock className="w-6 h-6" />}
-          trend={{ value: 0.2, direction: 'down' }}
-          color="emerald"
+          trend="-0.2"
+          color="secondary"
         />
       </div>
 

@@ -17,13 +17,13 @@ const PendingSchools: React.FC = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-extrabold text-white mb-4">Pending School Registrations</h1>
+      <h1 className="text-2xl font-extrabold text-black mb-4">Pending School Registrations</h1>
       <div className="space-y-4">
         {pending.map(p => (
           <Card key={p.id}>
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-bold text-white">{p.name}</div>
+                <div className="font-bold text-black">{p.name}</div>
                 <div className="text-xs text-slate-400">{p.city}, {p.region} — {p.contact}</div>
                 <div className="text-[11px] text-slate-500 mt-1">Submitted: {p.submitted_at}</div>
               </div>

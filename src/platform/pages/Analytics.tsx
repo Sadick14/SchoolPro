@@ -41,28 +41,28 @@ const Analytics: React.FC = () => {
           label="Total Revenue"
           value={`GHS ${analyticsData.totalRevenue.toLocaleString()}`}
           icon={<DollarSign className="w-6 h-6" />}
-          trend={{ value: analyticsData.revenueGrowth, direction: 'up' }}
-          color="emerald"
+          trend={`+${analyticsData.revenueGrowth}%`}
+          color="success"
         />
         <StatCard
           label="Active Schools"
-          value={analyticsData.activeSchools}
+          value={analyticsData.activeSchools.toString()}
           icon={<Building2 className="w-6 h-6" />}
-          trend={{ value: analyticsData.schoolsGrowth, direction: 'up' }}
-          color="blue"
+          trend={`+${analyticsData.schoolsGrowth}%`}
+          color="primary"
         />
         <StatCard
           label="Total Users"
-          value={analyticsData.totalUsers}
+          value={analyticsData.totalUsers.toString()}
           icon={<Users className="w-6 h-6" />}
-          trend={{ value: analyticsData.usersGrowth, direction: 'up' }}
-          color="purple"
+          trend={`+${analyticsData.usersGrowth}%`}
+          color="accent"
         />
         <StatCard
           label="Avg Users/School"
-          value={analyticsData.avgUsersPerSchool}
+          value={analyticsData.avgUsersPerSchool.toString()}
           icon={<BarChart3 className="w-6 h-6" />}
-          color="orange"
+          color="secondary"
         />
       </div>
 

@@ -3,12 +3,11 @@ import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   School, Users, Home, BookOpen, Calendar, ClipboardCheck, 
   DollarSign, Bell, Menu, X, LogOut, UserCircle, Settings,
-  ChevronRight, TrendingUp, Bus, Building, Library, MessageSquare, FileText
+  ChevronRight, TrendingUp, Bus, Building, Library, MessageSquare, HeartPulse, Laptop, ShieldCheck, FileText, WalletCards
 } from 'lucide-react';
 import { MOCK_NOTIFICATIONS } from '@/shared/lib/mockData';
 import { useAuth, hasRole } from '@/shared/lib/auth';
 import type { UserRole } from '@/shared/lib/auth';
-
 
 interface NavItem {
   path: string;
@@ -47,16 +46,14 @@ const MainLayoutRoles: React.FC = () => {
       label: 'System',
       icon: <School size={18} />, 
       items: [
-        { path: '/', label: 'Dashboard', icon: <Home size={16} /> },
-        { path: '/system/overview', label: 'System Overview', icon: <Building size={16} /> },
-        { path: '/system/tenants', label: 'Manage Tenants', icon: <Users size={16} /> },
-        { path: '/system/users', label: 'System Users', icon: <UserCircle size={16} /> },
-        { path: '/system/analytics', label: 'Analytics', icon: <TrendingUp size={16} /> },
-        { path: '/system/activity', label: 'Activity Log', icon: <FileText size={16} /> },
-        { path: '/system/create-school', label: 'Create School', icon: <Building size={16} /> },
+        { path: '/system/super-dashboard', label: 'Control Center', icon: <Home size={16} /> },
+        { path: '/system', label: 'Manage Tenants', icon: <Building size={16} /> },
+        { path: '/implementation', label: 'Implementation', icon: <ShieldCheck size={16} /> },
+        { path: '/system/dashboard', label: 'Analytics', icon: <TrendingUp size={16} /> },
+        { path: '/system/create-school', label: 'Add School', icon: <Building size={16} /> },
+        { path: '/subscriptions', label: 'Subscriptions', icon: <WalletCards size={16} /> },
         { path: '/system/pending', label: 'Pending Schools', icon: <ClipboardCheck size={16} /> },
         { path: '/system/tickets', label: 'Support Tickets', icon: <MessageSquare size={16} /> },
-        { path: '/system/settings', label: 'Settings', icon: <Settings size={16} /> },
       ]
     },
     {
@@ -65,18 +62,23 @@ const MainLayoutRoles: React.FC = () => {
       icon: <School size={18} />,
       items: [
         { path: '/school', label: 'Owner Dashboard', icon: <Home size={16} /> },
-        { path: '/school/setup', label: 'Initial Setup', icon: <ClipboardCheck size={16} /> },
         { path: '/school/campuses', label: 'Campuses', icon: <Building size={16} /> },
         { path: '/school/staff', label: 'Staff Management', icon: <UserCircle size={16} /> },
         { path: '/school/admissions', label: 'Admissions', icon: <ClipboardCheck size={16} /> },
         { path: '/students', label: 'Students', icon: <Users size={16} /> },
         { path: '/classes', label: 'Classes', icon: <BookOpen size={16} /> },
         { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
+        { path: '/finance', label: 'Accounting', icon: <WalletCards size={16} /> },
+        { path: '/payroll', label: 'Payroll', icon: <UserCircle size={16} /> },
         { path: '/hr', label: 'HR', icon: <UserCircle size={16} /> },
         { path: '/hostel', label: 'Hostel', icon: <Building size={16} /> },
         { path: '/transport', label: 'Transport', icon: <Bus size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
-        { path: '/communications', label: 'Communication', icon: <MessageSquare size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
+        { path: '/clinic', label: 'Clinic', icon: <HeartPulse size={16} /> },
+        { path: '/security', label: 'Security', icon: <ShieldCheck size={16} /> },
+        { path: '/reports', label: 'Reports', icon: <FileText size={16} /> },
+        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
       ]
     },
     {
@@ -87,10 +89,11 @@ const MainLayoutRoles: React.FC = () => {
         { path: '/teacher', label: 'Dashboard', icon: <Home size={16} /> },
         { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
         { path: '/assessments', label: 'Assessments', icon: <ClipboardCheck size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
         { path: '/students', label: 'My Students', icon: <Users size={16} /> },
         { path: '/classes', label: 'My Classes', icon: <BookOpen size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
-        { path: '/communications', label: 'Communication', icon: <MessageSquare size={16} /> },
+        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
       ]
     },
     {
@@ -102,7 +105,7 @@ const MainLayoutRoles: React.FC = () => {
         { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
         { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
         { path: '/transport', label: 'Transport', icon: <Bus size={16} /> },
-        { path: '/communications', label: 'Communication', icon: <MessageSquare size={16} /> },
+        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
       ]
     },
     {
@@ -111,11 +114,12 @@ const MainLayoutRoles: React.FC = () => {
       icon: <Users size={18} />,
       items: [
         { path: '/student', label: 'Portal', icon: <Home size={16} /> },
+        { path: '/lms', label: 'LMS', icon: <Laptop size={16} /> },
         { path: '/assessments', label: 'Exams', icon: <ClipboardCheck size={16} /> },
         { path: '/attendance', label: 'Attendance', icon: <Calendar size={16} /> },
         { path: '/library', label: 'Library', icon: <Library size={16} /> },
         { path: '/fees', label: 'Fees', icon: <DollarSign size={16} /> },
-        { path: '/communications', label: 'Communication', icon: <MessageSquare size={16} /> },
+        { path: '/notifications', label: 'Communication', icon: <MessageSquare size={16} /> },
       ]
     }
   ];
@@ -226,7 +230,7 @@ const MainLayoutRoles: React.FC = () => {
                    <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg p-3 z-50">
                      <h4 className="text-sm font-bold text-gray-800 mb-2">Notifications</h4>
                      <div className="space-y-2 max-h-64 overflow-y-auto">
-                       {MOCK_NOTIFICATIONS.map((n: typeof MOCK_NOTIFICATIONS[0]) => (
+                       {MOCK_NOTIFICATIONS.map(n => (
                          <div key={n.id} className="p-2 bg-gray-50 rounded-lg">
                            <div className="flex items-start justify-between">
                              <div>
