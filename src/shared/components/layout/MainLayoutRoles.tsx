@@ -66,6 +66,7 @@ const MainLayoutRoles: React.FC = () => {
       items: [
         { path: '/school', label: 'Owner Dashboard', icon: <Home size={16} /> },
         { path: '/school/setup', label: 'Initial Setup', icon: <ClipboardCheck size={16} /> },
+        { path: '/academics', label: 'Academics', icon: <BookOpen size={16} /> },
         { path: '/school/campuses', label: 'Campuses', icon: <Building size={16} /> },
         { path: '/school/staff', label: 'Staff Management', icon: <UserCircle size={16} /> },
         { path: '/school/admissions', label: 'Admissions', icon: <ClipboardCheck size={16} /> },

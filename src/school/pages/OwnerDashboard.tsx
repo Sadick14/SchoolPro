@@ -28,6 +28,7 @@ const OwnerDashboard: React.FC = () => {
         </div>
         <div className="flex items-center space-x-3">
           <Button onClick={() => navigate('/school/setup')}>Initial Setup</Button>
+          <Button variant="glass" onClick={() => navigate('/academics')}>Academics</Button>
           <Button variant="glass" onClick={() => navigate('/school/campuses')}>Campuses</Button>
           <Button variant="glass" onClick={() => navigate('/school/staff')}>Staff</Button>
           <Button variant="glass" onClick={() => navigate('/school/admissions')}>Admissions</Button>
@@ -48,6 +49,7 @@ const OwnerDashboard: React.FC = () => {
         <Card title="Quick Actions">
           <div className="space-y-3">
             <Button onClick={() => navigate('/school/setup')}>Continue Initial Setup</Button>
+            <Button onClick={() => navigate('/academics')}>Academic Sessions</Button>
             <Button onClick={() => navigate('/school/campuses')}>Manage Campuses</Button>
             <Button onClick={() => navigate('/school/staff')}>Add Staff</Button>
             <Button onClick={() => navigate('/school/admissions')}>Review Admissions</Button>
