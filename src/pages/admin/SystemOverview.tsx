@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import ModulesPanel from '../../components/admin/ModulesPanel';
@@ -37,6 +38,7 @@ const SystemOverview: React.FC = () => {
           <p className="text-slate-400 mt-1">Manage tenants, modules, and global configuration.</p>
         </div>
         <div className="flex items-center space-x-3">
+            <Button variant="glass" onClick={() => navigate('/implementation')}>Implementation</Button>
             <Button variant="glass" onClick={() => navigate('/system/dashboard')}>Overview</Button>
             <Button variant="glass" onClick={() => navigate('/system/pending')}>Pending</Button>
             <Button variant="glass" onClick={() => navigate('/system/tickets')}>Tickets</Button>
@@ -49,7 +51,7 @@ const SystemOverview: React.FC = () => {
           <Card title="Registered Schools">
             <div className="space-y-3">
               {schools.map(s => (
-                <div key={s.id} className={`p-3 rounded-xl border ${selectedSchool === s.id ? 'border-primary-500 bg-white/5' : 'border-white/5' } flex items-center justify-between` }>
+                <div key={s.id} onClick={() => setSelectedSchool(s.id)} className={`p-3 rounded-xl border ${selectedSchool === s.id ? 'border-primary-500 bg-white/5' : 'border-white/5' } flex items-center justify-between cursor-pointer` }>
                   <div>
                     <div className="font-bold text-white">{s.name}</div>
                     <div className="text-xs text-slate-400">{s.city}, {s.region} — {s.students} students</div>
