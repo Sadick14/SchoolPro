@@ -31,6 +31,8 @@ import PendingSchools from './pages/admin/PendingSchools';
 import SupportTickets from './pages/admin/SupportTickets';
 import CreateSchool from './pages/admin/CreateSchool';
 import { ImplementationCommandCenter, ModuleWorkspace } from './features/platform';
+import ImplementationCommandCenter from './pages/platform/ImplementationCommandCenter';
+import ModuleWorkspace from './pages/platform/ModuleWorkspace';
 
 function App() {
   const { initialized } = useAuth();
