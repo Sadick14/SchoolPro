@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: require authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: fetch the authenticated user's profile stored in /users/{uid}
+    function authUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Is the authenticated user a platform super admin?
+    function isSuperAdmin() {
+      return isSignedIn() && authUser().role == 'super_admin';
+    }
+
+    // Does the authenticated user belong to the given tenant?
+    function isTenantMember(tenantId) {
+      return isSignedIn() && authUser().school_id == tenantId;
+    }
+
+    // Top-level tenants collection: creation is limited to super admins
+    match /tenants/{tenantId} {
+      allow create: if isSuperAdmin();
+      allow read: if isSuperAdmin() || isTenantMember(tenantId);
+      // Allow tenant update by super admin or the tenant's school_admin
+      allow update: if isSuperAdmin() || (isTenantMember(tenantId) && authUser().role == 'school_admin');
+      allow delete: if isSuperAdmin();
+
+      // All subcollections under tenants/{tenantId}/...
+      match /{document=**} {
+        // Reads allowed for super admins and tenant members
+        allow get, list: if isSuperAdmin() || isTenantMember(tenantId);
+
+        // Writes: super admins or tenant admins/teachers depending on role
+        allow create, update, delete: if isSuperAdmin() || (isTenantMember(tenantId) && authUser().role in ['school_admin','teacher']);
+      }
+    }
+
+    // Users collection: users can read their own profile; tenant admins can read users in their tenant; super_admin can read all
+    match /users/{userId} {
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow read: if isSuperAdmin() || (isSignedIn() && (request.auth.uid == userId || (authUser().school_id != null && resource.data.school_id == authUser().school_id)));
+      allow update: if isSuperAdmin() || (isSignedIn() && request.auth.uid == userId) || (isSignedIn() && authUser().role == 'school_admin' && resource.data.school_id == authUser().school_id);
+      allow delete: if isSuperAdmin();
+    }
+
+    // Default deny rule for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

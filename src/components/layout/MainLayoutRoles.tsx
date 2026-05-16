@@ -9,28 +9,24 @@ import { MOCK_NOTIFICATIONS } from '../../lib/mockData';
 import { useAuth, hasRole } from '../../lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MainLayout: React.FC = () => {
+const MainLayoutRoles: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  
+
+  useEffect(() => setSidebarOpen(false), [location.pathname]);
+
   useEffect(() => {
-    setSidebarOpen(false);
-  }, [location.pathname]);
-  
-  useEffect(() => {
-    if (!user && location.pathname !== '/login') {
-      navigate('/login');
-    }
+    if (!user && location.pathname !== '/login') navigate('/login');
   }, [user, location.pathname, navigate]);
-  
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/login');
   };
-  
+
   const roleFolders = [
     {
       role: 'super_admin',
@@ -105,18 +101,14 @@ const MainLayout: React.FC = () => {
   ];
 
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
-  
-  if (!user) {
-    return <Outlet />;
-  }
-  
+
+  if (!user) return <Outlet />;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 flex overflow-hidden font-sans">
-      {/* Background Orbs */}
       <div className="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Sidebar */}
       <aside className={`
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         fixed inset-y-0 left-0 z-50 w-72 backdrop-blur-sm bg-white/95 border-r border-gray-200 transition-transform duration-300 ease-in-out
@@ -133,31 +125,40 @@ const MainLayout: React.FC = () => {
             <X size={20} />
           </button>
         </div>
-        
+
         <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
-          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest ml-4 mb-4">Main Menu</p>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-amber-400 to-orange-400 text-white shadow-lg'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                }`
-              }
-            >
-              <div className="flex items-center space-x-3">
-                {item.icon}
-                <span className="font-medium">{item.label}</span>
+          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest ml-4 mb-4">Features</p>
+          {roleFolders.map(folder => {
+            if (!hasRole(user, folder.role)) return null;
+            const isOpen = !!openFolders[folder.role];
+            return (
+              <div key={folder.role} className="mb-3">
+                <button
+                  type="button"
+                  onClick={() => setOpenFolders(prev => ({ ...prev, [folder.role]: !prev[folder.role] }))}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-200 ${isOpen ? 'bg-amber-50 text-gray-900' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}>
+                  <div className="flex items-center space-x-3">
+                    <div className="text-primary-600">{folder.icon}</div>
+                    <span className="font-medium">{folder.label}</span>
+                  </div>
+                  <ChevronRight size={14} className={`${isOpen ? 'rotate-90' : ''} transition-transform`} />
+                </button>
+
+                {isOpen && (
+                  <div className="mt-2 space-y-1 pl-6">
+                    {folder.items.map(it => (
+                      <NavLink key={it.path} to={it.path} className={({ isActive }) => `group flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 ${isActive ? 'bg-gradient-to-r from-amber-400 to-orange-400 text-white' : 'text-gray-700 hover:bg-gray-50'}`}>
+                        <div className="opacity-80">{it.icon}</div>
+                        <div className="font-medium">{it.label}</div>
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
               </div>
-              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-            </NavLink>
-          ))}
+            );
+          })}
         </nav>
-        
-        {/* User Card */}
+
         <div className="p-6 m-4 mt-auto rounded-3xl bg-gray-100 border border-gray-200 backdrop-blur-sm">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-500 border border-primary-300 flex items-center justify-center overflow-hidden">
@@ -188,24 +189,17 @@ const MainLayout: React.FC = () => {
           </div>
         </div>
       </aside>
-      
-      {/* Main content */}
+
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Top Header */}
         <header className="h-20 backdrop-blur-sm bg-white/80 border-b border-gray-200 flex items-center justify-between px-8 z-40">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 bg-gray-100 rounded-xl border border-gray-200 text-gray-600"
-          >
+          <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 bg-gray-100 rounded-xl border border-gray-200 text-gray-600">
             <Menu size={20} />
           </button>
-          
           <div className="hidden md:flex items-center text-sm text-gray-600">
              <span className="font-medium text-gray-900">Session: {new Date().getFullYear()} / {new Date().getFullYear() + 1}</span>
              <span className="mx-3 opacity-20">|</span>
              <span className="flex items-center space-x-1"><TrendingUp size={14} className="text-success-600" /> <span className="text-success-600">System Live</span></span>
           </div>
-          
           <div className="flex items-center space-x-4">
                <div className="relative">
                  <button onClick={() => setNotifOpen((s) => !s)} className="relative w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-xl transition-all">
@@ -242,31 +236,17 @@ const MainLayout: React.FC = () => {
 
         <main className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="max-w-7xl mx-auto"
-            >
+            <motion.div key={location.pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3, ease: "easeOut" }} className="max-w-7xl mx-auto">
               <Outlet />
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
-      
-      {/* Mobile Backdrop */}
+
       {sidebarOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
-      
+
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
@@ -286,4 +266,4 @@ const MainLayout: React.FC = () => {
   );
 };
 
-export default MainLayout;
+export default MainLayoutRoles;

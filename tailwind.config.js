@@ -91,6 +91,18 @@ export default {
           '100%': { transform: 'translateY(0)', opacity: 1 },
         },
       },
+      gradientColorStops: {
+        amber: {
+          light: '#FEF3C7',
+          DEFAULT: '#F59E0B',
+          dark: '#B45309',
+        },
+        orange: {
+          light: '#FFEDD5',
+          DEFAULT: '#FB923C',
+          dark: '#EA580C',
+        },
+      },
     },
   },
   plugins: [],

@@ -8,6 +8,7 @@ import {
   ArrowUpRight, AlertCircle, PhoneCall 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Sparkline from '../../components/common/Sparkline';
 
 const FeesManagement: React.FC = () => {
   return (
@@ -43,6 +44,9 @@ const FeesManagement: React.FC = () => {
           <div className="flex items-center text-xs font-bold text-success-400">
              <ArrowUpRight size={14} className="mr-1" />
              <span>8.2% vs last term</span>
+           </div>
+          <div className="mt-4">
+            <Sparkline data={[120, 150, 180, 160, 200, 240, 220]} width={200} height={40} stroke="#fff" />
           </div>
         </div>
 

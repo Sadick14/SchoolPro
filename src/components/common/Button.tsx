@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const variantClasses = {
-    primary: 'bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/30',
+    primary: 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white shadow-lg shadow-amber-400/30',
     secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800 shadow-sm',
     success: 'bg-success-500 hover:bg-success-600 text-white shadow-lg shadow-success-500/30',
     danger: 'bg-error-500 hover:bg-error-600 text-white shadow-lg shadow-error-500/30',

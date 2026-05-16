@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({
       className={`${baseClasses} ${variants[variant]} ${className}`}
     >
       {title && (
-        <div className="px-8 py-5 flex justify-between items-center border-b border-gray-100">
+        <div className="px-8 py-5 flex justify-between items-center border-b border-gray-100 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50">
           <h2 className="text-lg font-bold text-gray-800 tracking-tight">{title}</h2>
           {headerAction && <div>{headerAction}</div>}
         </div>

@@ -10,6 +10,7 @@ import Button from '../components/common/Button';
 import Table from '../components/common/Table';
 import { MOCK_STATS, MOCK_STUDENTS, MOCK_NOTIFICATIONS } from '../lib/mockData';
 import { motion } from 'framer-motion';
+import StatCard from '../components/common/StatCard';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -64,29 +65,18 @@ const Dashboard: React.FC = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <motion.div
+          <StatCard
             key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="premium-card p-6 flex flex-col justify-between group"
-          >
-            <div className="flex justify-between items-start">
-              <div className={`p-3 rounded-2xl bg-primary-100 text-primary-600 group-hover:bg-primary-200 group-hover:text-primary-700 transition-colors`}>
-                {stat.label.includes('Students') ? <Users size={20} /> : 
-                 stat.label.includes('Attendance') ? <CalendarCheck size={20} /> :
-                 stat.label.includes('Fees') ? <Wallet size={20} /> : <School size={20} />}
-              </div>
-              <div className={`flex items-center text-xs font-bold ${stat.trend.startsWith('+') ? 'text-success-600' : 'text-error-600'}`}>
-                {stat.trend.startsWith('+') ? <TrendingUp size={14} className="mr-1" /> : <TrendingDown size={14} className="mr-1" />}
-                {stat.trend}
-              </div>
-            </div>
-            <div className="mt-4">
-              <p className="text-2xl font-black text-gray-900">{stat.value}</p>
-              <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mt-1">{stat.label}</p>
-            </div>
-          </motion.div>
+            label={stat.label}
+            value={stat.value}
+            trend={stat.trend}
+            icon={
+              stat.label.includes('Students') ? <Users size={20} /> :
+              stat.label.includes('Attendance') ? <CalendarCheck size={20} /> :
+              stat.label.includes('Fees') ? <Wallet size={20} /> : <School size={20} />
+            }
+            color={stat.color as any}
+          />
         ))}
       </div>
 

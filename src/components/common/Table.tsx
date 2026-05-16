@@ -52,13 +52,13 @@ function Table<T>({
       className="overflow-x-auto backdrop-blur-sm bg-white/90 border border-gray-200 rounded-[2rem] shadow-lg"
     >
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-100">
+        <thead className="bg-gradient-to-r from-amber-400 to-orange-400 text-white">
           <tr>
             {columns.map((column, index) => (
               <th
                 key={index}
                 scope="col"
-                className={`px-8 py-5 text-left text-[11px] font-extrabold text-gray-700 uppercase tracking-[0.2em] ${column.className || ''}`}
+                className={`px-8 py-5 text-left text-[11px] font-extrabold uppercase tracking-[0.2em] ${column.className || ''}`}
               >
                 {column.header}
               </th>
